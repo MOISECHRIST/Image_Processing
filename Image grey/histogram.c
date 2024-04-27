@@ -17,6 +17,7 @@ If the node don't exist, the function add a new node in the histogram
 */
 Histogram add_node(Histogram hist, int node){
     hist.freq_table[node]++;
+    hist.total_freq++;
     return hist;
 }
 

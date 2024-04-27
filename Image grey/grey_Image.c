@@ -3,7 +3,7 @@
 #include <string.h>
 
 //Read the image from file path
-grey_Image read_image(char *filename, , grey_Image *img){
+void read_image(char *filename, , grey_Image *img){
     FILE* pgmFile;
     int i, j, tmp=0;
 
@@ -40,6 +40,11 @@ grey_Image read_image(char *filename, , grey_Image *img){
 
 
     fclose(pgmFile);
+}
+
+//save the image in pgm file
+void save_image(grey_Image *){
+
 }
 
 //Display image
@@ -114,7 +119,7 @@ void  linear_processing(grey_Image *img){
 
 //image addition 
 grey_Image * image_addition(grey_Image img1, grey_Image img2){
-    if((img1->longueur!=img2->longueur)|(img1->largeur!=img2->largeur)){
+    if((img1->longueur!=img2->longueur)||(img1->largeur!=img2->largeur)){
         printf("[ERROR]::Les images n'ont pas les meme dimensions...");
         exit(1);
     }
@@ -141,7 +146,7 @@ grey_Image * image_addition(grey_Image img1, grey_Image img2){
 
 //image addition 
 grey_Image * image_subtraction(grey_Image *img1, grey_Image *img2){
-    if((img1->longueur!=img2->longueur)|(img1->largeur!=img2->largeur)){
+    if((img1->longueur!=img2->longueur)||(img1->largeur!=img2->largeur)){
         printf("[ERROR]::Les images n'ont pas les meme dimensions...");
         exit(1);
     }
@@ -191,10 +196,19 @@ grey_Image * image_multiplication(grey_Image *img, float ratio){
 
 //Buid the image's histogram
 Histogram build_histogram(grey_Image *img){
-    
+    Histogram hist=init_Histogram();
+    int i,j;
+    int node=0;
+    for(i=0;i<img_res->largeur;i++){
+        for(j=0;j<img_res->largeur;j++){
+            node = img->pixels[i][j];
+            hist=add_node(hist,node);
+        }
+    }
+    return hist;
 }
 
 //Compute the histogram egalization
-void  histogram_egalization(grey_Image){
+grey_Image * histogram_egalization(grey_Image *img){
     
 }

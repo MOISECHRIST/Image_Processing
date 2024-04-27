@@ -17,7 +17,10 @@ typedef struct grey_Image {
 } grey_Image;
 
 //Read the image from file path
-grey_Image read_image(char *, grey_Image *);
+void read_image(char *, grey_Image *);
+
+//save the image in pgm file
+void save_image(grey_Image *);
 
 //Display image
 void display_image(grey_Image *);
@@ -37,9 +40,6 @@ void linear_processing_with_saturation(grey_Image *, int, int);
 //Compute lineair processing
 void linear_processing(grey_Image *);
 
-//Compute the histogram egalization
-grey_Image * histogram_egalization(grey_Image *);
-
 //image addition 
 grey_Image * image_addition(grey_Image *, grey_Image *);
 
@@ -53,6 +53,6 @@ grey_Image * image_multiplication(grey_Image *, float);
 Histogram * build_histogram(grey_Image *);
 
 //Compute the histogram egalization
-void histogram_egalization(grey_Image *);
+grey_Image * histogram_egalization(grey_Image *);
 
 #endif
