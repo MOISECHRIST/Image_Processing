@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "histogram_node.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
