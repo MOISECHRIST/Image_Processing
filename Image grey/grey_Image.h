@@ -12,6 +12,7 @@ typedef struct grey_Image {
     int longeur;
     char version[3];
     int pixelmax;
+    int pixelmin;
     int **pixels;
 } grey_Image;
 
@@ -31,10 +32,10 @@ float contrast_variance(grey_Image *);
 float contract_minmax(grey_Image *);
 
 //Compute lineair processing with saturation
-grey_Image * linear_processing_with_saturation(grey_Image *, int, int); 
+void linear_processing_with_saturation(grey_Image *, int, int); 
 
 //Compute lineair processing
-grey_Image * linear_processing(grey_Image *);
+void linear_processing(grey_Image *);
 
 //Compute the histogram egalization
 grey_Image * histogram_egalization(grey_Image *);
@@ -42,13 +43,16 @@ grey_Image * histogram_egalization(grey_Image *);
 //image addition 
 grey_Image * image_addition(grey_Image *, grey_Image *);
 
-//image addition 
+//image subtraction 
 grey_Image * image_subtraction(grey_Image *, grey_Image *);
 
 //image multiplication with a ratio
 grey_Image * image_multiplication(grey_Image *, float);
 
 //Buid the image's histogram
-Histogram build_histogram(grey_Image *);
+Histogram * build_histogram(grey_Image *);
+
+//Compute the histogram egalization
+void histogram_egalization(grey_Image *);
 
 #endif

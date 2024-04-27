@@ -69,5 +69,6 @@ int main() {
     grey_Image *img=malloc(sizeof(grey_Image));
     readPGM("image.pgm", img);
     printImage(img);
+    
     return 0;
 }

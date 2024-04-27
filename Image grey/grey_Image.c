@@ -1,5 +1,6 @@
 #include "grey_Image.h"
 #include <math.h>
+#include <string.h>
 
 //Read the image from file path
 grey_Image read_image(char *filename, , grey_Image *img){
@@ -26,11 +27,16 @@ grey_Image read_image(char *filename, , grey_Image *img){
 
     fgetc(pgmFile); // Read white-space
 
+    int mini=255;
     for (i = 0; i < img->longeur; ++i) {
         for (j = 0; j < img->largeur; ++j) {
             img->pixels[i][j] = fgetc(pgmFile);
+            if(mini>(img->pixels[i][j]))
+                mini=img->pixels[i][j];
         }
     }
+
+    img->pixelmin=mini;
 
 
     fclose(pgmFile);
@@ -75,40 +81,120 @@ float contrast_variance(grey_Image *img){
     return sqrt(cont/(img->longeur*img->largeur));
 }
 
-int find_min(grey_Image *){
-    
-}
-//Compute the image's contrast as relative distance between min and max 
-float contract_minmax(grey_Image){
 
+//Compute the image's contrast as relative distance between min and max 
+float contract_minmax(grey_Image *img){
+    return (img->pixelmax-img->pixelmin)/(img->pixelmax+img->pixelmin);
 }
 
 //Compute lineair processing with saturation
-grey_Image  linear_processing_with_saturation(grey_Image, int, int){
+void linear_processing_with_saturation(grey_Image *img, int Smax, int Smin){
+    int res[255],i,j;
+    for(i=0;i<255;i++){
+        res[i]=255*(i-Smin)/(Smax-Smin);
+    }
 
+    img->pixelmin=(int)255*(img->pixelmin-Smin)/(Smax-Smin);
+    img->pixelmax=(int)255*(img->pixelmax-Smin)/(Smax-Smin);
+
+    for(i=0;i<img->largeur;i++){
+        for(j=0;j<img->longueur;j++)
+            img->pixels[i][j]=res[img->pixels[i][j]];
+    }
 }
 
 //Compute lineair processing
-grey_Image  linear_processing(grey_Image){
-
+void  linear_processing(grey_Image *img){
+    int Smin,Smax;
+    Smin=img->pixelmin;
+    Smax=img->pixelmax;
+    linear_processing_with_saturation(img, Smax, Smin);
 }
 
-//Compute the histogram egalization
-grey_Image  histogram_egalization(grey_Image){
 
+//image addition 
+grey_Image * image_addition(grey_Image img1, grey_Image img2){
+    if((img1->longueur!=img2->longueur)|(img1->largeur!=img2->largeur)){
+        printf("[ERROR]::Les images n'ont pas les meme dimensions...");
+        exit(1);
+    }
+    grey_Image img_res=malloc(sizeof(grey_Image));
+    img_res->longueur=img1->longueur;
+    img_res->largeur=img1->largeur;
+    strcpy(img_res->version,img1->version);
+    int i,j;
+    int mini=255,maxi=0;
+    for(i=0;i<img_res->largeur;i++){
+        for(j=0;j<img_res->largeur;j++){
+
+            img_res->pixels[i][j]=(img1->pixels[i][j]+img2->pixels[i][j])>=255?255:(img1->pixels[i][j]+img2->pixels[i][j]);
+            if(img_res->pixels[i][j]>maxi)
+                maxi=img_res->pixels[i][j];
+            if(img_res->pixels[i][j]<mini)
+                mini=img_res->pixels[i][j];
+        }
+    }
+    img_res->pixelmax=maxi;
+    img_res->pixelmin=mini;
+    return img_res;
 }
 
 //image addition 
-grey_Image  image_addition(grey_Image, grey_Image){
+grey_Image * image_subtraction(grey_Image *img1, grey_Image *img2){
+    if((img1->longueur!=img2->longueur)|(img1->largeur!=img2->largeur)){
+        printf("[ERROR]::Les images n'ont pas les meme dimensions...");
+        exit(1);
+    }
+    grey_Image img_res=malloc(sizeof(grey_Image));
+    img_res->longueur=img1->longueur;
+    img_res->largeur=img1->largeur;
+    strcpy(img_res->version,img1->version);
+    int i,j;
+    int mini=255,maxi=0;
+    for(i=0;i<img_res->largeur;i++){
+        for(j=0;j<img_res->largeur;j++){
 
+            img_res->pixels[i][j]=(img1->pixels[i][j]-img2->pixels[i][j])<=0?0:(img1->pixels[i][j]+img2->pixels[i][j]);
+            if(img_res->pixels[i][j]>maxi)
+                maxi=img_res->pixels[i][j];
+            if(img_res->pixels[i][j]<mini)
+                mini=img_res->pixels[i][j];
+        }
+    }
+    img_res->pixelmax=maxi;
+    img_res->pixelmin=mini;
+    return img_res;
 }
 
 //image multiplication with a ratio
-grey_Image  image_multiplication(grey_Image, float){
+grey_Image * image_multiplication(grey_Image *img, float ratio){
+    grey_Image img_res=malloc(sizeof(grey_Image));
+    img_res->longueur=img->longueur;
+    img_res->largeur=img->largeur;
+    strcpy(img_res->version,img->version);
+    int i,j;
+    int mini=255,maxi=0;
+    for(i=0;i<img_res->largeur;i++){
+        for(j=0;j<img_res->largeur;j++){
 
+            img_res->pixels[i][j]=(int)(img->pixels[i][j]*ratio)>255?255:(img->pixels[i][j]*ratio);
+            if(img_res->pixels[i][j]>maxi)
+                maxi=img_res->pixels[i][j];
+            if(img_res->pixels[i][j]<mini)
+                mini=img_res->pixels[i][j];
+        }
+    }
+    img_res->pixelmax=maxi;
+    img_res->pixelmin=mini;
+    return img_res;
 }
 
 //Buid the image's histogram
-Histogram build_histogram(grey_Image){
+Histogram build_histogram(grey_Image *img){
+    
+}
 
+//Compute the histogram egalization
+void  histogram_egalization(grey_Image){
+    
 }
