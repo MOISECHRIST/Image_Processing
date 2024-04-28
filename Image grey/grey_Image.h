@@ -46,11 +46,7 @@ void linear_processing(grey_Image *);
 //images addition 
 grey_Image * image_addition(grey_Image *, grey_Image *);
 
-<<<<<<< HEAD
-//images subtraction 
-=======
 //image subtraction 
->>>>>>> 2ad3854c666482ad2cad41b27af60e2ca7388bc8
 grey_Image * image_subtraction(grey_Image *, grey_Image *);
 
 //image multiplication with a ratio
@@ -58,11 +54,8 @@ grey_Image * image_multiplication(grey_Image *, float);
 
 //Buid the image's histogram
 Histogram * build_histogram(grey_Image *);
-<<<<<<< HEAD
-=======
 
 //Compute the histogram egalization
 grey_Image * histogram_egalization(grey_Image *);
->>>>>>> 2ad3854c666482ad2cad41b27af60e2ca7388bc8
 
 #endif
