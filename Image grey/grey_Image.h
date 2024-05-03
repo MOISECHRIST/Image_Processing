@@ -1,15 +1,16 @@
-#include "histogram.h"
-
 #ifndef GREY_IMAGE_H
 #define GREY_IMAGE_H
+#include <stdio.h>
+#include <stdlib.h>
 
-//Size of image
+#include "histogram.h"
+// High size of grey
 #define N 255
 
 //Definition of the image structure
 typedef struct grey_Image {
     int largeur;
-    int longeur;
+    int longueur;
     char version[3];
     int pixelmax;
     int pixelmin;
@@ -50,7 +51,7 @@ grey_Image * image_subtraction(grey_Image *, grey_Image *);
 grey_Image * image_multiplication(grey_Image *, float);
 
 //Buid the image's histogram
-Histogram * build_histogram(grey_Image *);
+Histogram build_histogram(grey_Image *);
 
 //Compute the histogram egalization
 grey_Image * histogram_egalization(grey_Image *);
