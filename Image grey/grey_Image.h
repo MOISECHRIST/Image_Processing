@@ -32,6 +32,9 @@ float luminance(grey_Image *);
 //Compute the image's contrast as variance of pixels
 float contrast_variance(grey_Image *);
 
+//Find min value of all pixels
+int find_min(grey_Image *)
+
 //Compute the image's contrast as relative distance between min and max 
 float contract_minmax(grey_Image *);
 
@@ -41,7 +44,7 @@ void linear_processing_with_saturation(grey_Image *, int, int);
 //Compute lineair processing
 void linear_processing(grey_Image *);
 
-//image addition 
+//images addition 
 grey_Image * image_addition(grey_Image *, grey_Image *);
 
 //image subtraction 

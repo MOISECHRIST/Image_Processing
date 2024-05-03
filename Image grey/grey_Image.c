@@ -40,7 +40,6 @@ void read_image(char *filename,grey_Image *img){
 
     img->pixelmin=mini;
 
-
     fclose(pgmFile);
 }
 
@@ -53,9 +52,15 @@ void save_image(grey_Image *){
 void display_image(grey_Image *img){
     int i,j;
     printf("%s \n",img->version);
+<<<<<<< HEAD
     printf("%d %d\n", img->longueur, img->largeur);
     printf("%d\n", img->pixelmax);
     for (i = 0; i < img->longueur; ++i) {
+=======
+    printf("%d %d\n", img->longeur, img->largeur);
+    printf("%d %d\n", img->pixelmax, img->pixelmin);
+    for (i = 0; i < img->longeur; ++i) {
+>>>>>>> 3ff0c8d4a0e119b049d794068dc8e8259ebbb870
         for (j = 0; j < img->largeur; ++j) {
             printf("%d ", img->pixels[i][j]);
         }
