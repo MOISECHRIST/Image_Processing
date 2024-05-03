@@ -32,9 +32,6 @@ float luminance(grey_Image *);
 //Compute the image's contrast as variance of pixels
 float contrast_variance(grey_Image *);
 
-//Find min value of all pixels
-int find_min(grey_Image *)
-
 //Compute the image's contrast as relative distance between min and max 
 float contract_minmax(grey_Image *);
 

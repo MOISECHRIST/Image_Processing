@@ -45,10 +45,10 @@ void print_histogram(Histogram hist, int xlim){
             printf("%d ",i);*/
         for(j=0;j<N/xlim;j++){
             if(hist.freq_table[j]>=i){
-                printf("* ");
+                printf("*  ");
             }
             else{
-                printf("  ");
+                printf("   ");
             }
         }
         printf("\n");
@@ -77,11 +77,12 @@ void print_hist_in_file(Histogram hist){
             fprintf(file,"%d ",i);*/
         for(j=0;j<N;j++){
             if(hist.freq_table[j]>=i){
-                fprintf(file, "* ");
+                fprintf(file, "*  ");
             }
             else{
-                fprintf(file, "  ");
+                fprintf(file, "   ");
             }
+            
         }
         fprintf(file, "\n");
     }
@@ -91,6 +92,6 @@ void print_hist_in_file(Histogram hist){
         else
             fprintf(file,"%d ",i);
     }
-    printf("\n");
+    fprintf(file, "\n");
     fclose(file);
 }
