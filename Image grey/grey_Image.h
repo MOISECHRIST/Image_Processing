@@ -21,7 +21,7 @@ typedef struct grey_Image {
 void read_image(char *, grey_Image *);
 
 //save the image in pgm file
-void save_image(grey_Image *);
+void save_image(grey_Image *, char *);
 
 //Display image
 void display_image(grey_Image *);
