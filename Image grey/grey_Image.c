@@ -23,9 +23,9 @@ void read_image(char *filename,grey_Image *img){
     fscanf(pgmFile, "%d", &tmp);
     img->pixelmax=tmp;
 
-    img->pixels = (int**)malloc(img->longueur * sizeof(int*));
+    img->pixels = (unsigned char **)malloc(img->longueur * sizeof(unsigned char *));
     for(i = 0; i < img->longueur; i++)
-        img->pixels[i] = (int*)malloc(img->largeur * sizeof(int));
+        img->pixels[i] = (unsigned char*)malloc(img->largeur * sizeof(unsigned char));
 
     fgetc(pgmFile); // Read white-space
 
