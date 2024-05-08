@@ -23,7 +23,7 @@ void read_image(char *filename,grey_Image *img){
     fscanf(pgmFile, "%d", &tmp);
     img->pixelmax=tmp;
 
-    img->pixels = (int**)malloc(img->longueur * sizeof(int*));
+    img->pixels = (unsigned int**)malloc(img->longueur * sizeof(unsigned int*));
     for(i = 0; i < img->longueur; i++)
         img->pixels[i] = (int*)malloc(img->largeur * sizeof(int));
 
@@ -44,8 +44,26 @@ void read_image(char *filename,grey_Image *img){
 }
 
 //save the image in pgm file
-void save_image(grey_Image *){
+void save_image(grey_Image *img){
+    char *filename="image_output.pgm";
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Impossible d'ouvrir le fichier %s\n", filename);
+        return;
+    }
 
+    fprintf(file, "%s\n", img->version);
+    fprintf(file, "%d %d\n", img->largeur, img->longueur);
+    fprintf(file, "%d\n", img->pixelmax);
+    int i,j;
+    unsigned int pixel;
+    for(i=0;i<img->longueur;i++){
+        for(j=0;j<img->largeur;j++){
+            pixel=(unsigned char)img->pixels[i][j];
+            fwrite(&pixel, sizeof(int), 1, file);
+        }
+    }
+    fclose(file);
 }
 
 //Display image

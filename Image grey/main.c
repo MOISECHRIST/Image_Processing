@@ -8,5 +8,6 @@ int main(void){
     Histogram hist=build_histogram(img);
     print_histogram(hist, 5);
     print_hist_in_file(hist);
+    save_image(img);
     return 0;
 }

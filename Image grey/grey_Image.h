@@ -14,7 +14,7 @@ typedef struct grey_Image {
     char version[3];
     int pixelmax;
     int pixelmin;
-    int **pixels;
+    unsigned int **pixels;
 } grey_Image;
 
 //Read the image from file path
