@@ -93,13 +93,13 @@ void print_hist_in_file(Histogram hist){
 }
 
 //Display my histogram in the pgm file 
-void print_hist_into_pgm(Histogram hist, int bins, char *filename, int grey_level){
+void print_hist_into_pgm(Histogram hist, int bins, char *filename, int grey_level, int echelle){
     if(grey_level>255||grey_level<0){
         printf("Invalid value of grey level\nThe value is between 0 and 255");
         exit(1);
     }
 
-    int max_val=maximum(hist), i,j,l,k=0;
+    int max_val=maximum(hist)/echelle, i,j,l,k=0;
     FILE *file = fopen(filename, "wb");
     if (!file) {
         printf("Erreur lors de l'ouverture du fichier.\n");
@@ -112,7 +112,7 @@ void print_hist_into_pgm(Histogram hist, int bins, char *filename, int grey_leve
 
     for(i=max_val;i>=0;i--){
         for(j=0;j<N;j++){
-            if(hist.freq_table[j]>=i){
+            if((hist.freq_table[j]/echelle)>=i){
                 for(l=0;l<bins;l++){
                     hist_char[k+l]=(unsigned char)grey_level;
                 }

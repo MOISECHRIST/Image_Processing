@@ -169,7 +169,7 @@ grey_Image * image_addition(grey_Image *img1, grey_Image *img2){
                 mini=img_res->pixels[i][j];
         }
     }
-    img_res->pixelmax=maxi;
+    img_res->pixelmax=255;
     img_res->pixelmin=mini;
     return img_res;
 }
@@ -201,7 +201,7 @@ grey_Image * image_subtraction(grey_Image *img1, grey_Image *img2){
                 mini=img_res->pixels[i][j];
         }
     }
-    img_res->pixelmax=maxi;
+    img_res->pixelmax=255;
     img_res->pixelmin=mini;
     return img_res;
 }
@@ -230,7 +230,7 @@ grey_Image * image_multiplication(grey_Image *img, float ratio){
         }
     }
     
-    img_res->pixelmax=maxi;
+    img_res->pixelmax=255;
     img_res->pixelmin=mini;
     return img_res;
 }

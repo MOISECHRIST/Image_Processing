@@ -37,7 +37,8 @@ int = bins
 char = filename
 int = grey level (value is between 0 and 255 If equal to 0 the color is black 
 if equal to 255 the color is white. between the last two number the color is grey)
+int = echelle
 */
-void print_hist_into_pgm(Histogram, int, char *, int);
+void print_hist_into_pgm(Histogram, int, char *, int, int);
 
 #endif
