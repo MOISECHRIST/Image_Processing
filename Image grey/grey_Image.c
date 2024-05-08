@@ -250,6 +250,19 @@ Histogram build_histogram(grey_Image *img){
 }
 
 //Compute the histogram egalization
-grey_Image * histogram_egalization(grey_Image *img){
+void histogram_egalization(grey_Image *img){
+    Histogram hist = build_histogram(img);
+    int i,j;
+    float densite[N];
     
+    densite[0]=hist.freq_table[0];
+    for(i=1;i<N;i++){
+        densite[i]=densite[i-1]+hist.freq_table[i];
+    }
+
+    for(i=0;i<img->longueur;i++){
+        for(j=0;j<img->largeur;j++){
+            img->pixels[i][j]=(unsigned char)((int)(255*(densite[img->pixels[i][j]]/hist.total_freq)));
+        }
+    }
 }

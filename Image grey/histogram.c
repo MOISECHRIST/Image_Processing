@@ -71,10 +71,6 @@ void print_hist_in_file(Histogram hist){
     }
     int max_val=maximum(hist), i,j;
     for(i=max_val;i>=0;i--){
-        /*if(i<10)
-            fprintf(file,"%d  ",i);
-        else
-            fprintf(file,"%d ",i);*/
         for(j=0;j<N;j++){
             if(hist.freq_table[j]>=i){
                 fprintf(file, "*  ");
@@ -94,4 +90,40 @@ void print_hist_in_file(Histogram hist){
     }
     fprintf(file, "\n");
     fclose(file);
+}
+
+//Display my histogram in the pgm file 
+void print_hist_into_pgm(Histogram hist, int bins, char *filename, int grey_level){
+    if(grey_level>255||grey_level<0){
+        printf("Invalid value of grey level\nThe value is between 0 and 255");
+        exit(1);
+    }
+
+    int max_val=maximum(hist), i,j,l,k=0;
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        printf("Erreur lors de l'ouverture du fichier.\n");
+        exit(1);
+    }
+    
+    fprintf(file, "P5\n%d %d\n255\n", N*bins, max_val);
+
+    unsigned char *hist_char=(unsigned char *)malloc(N*bins*max_val*sizeof(unsigned char *));
+
+    for(i=max_val;i>=0;i--){
+        for(j=0;j<N;j++){
+            if(hist.freq_table[j]>=i){
+                for(l=0;l<bins;l++){
+                    hist_char[k+l]=(unsigned char)grey_level;
+                }
+            }
+            else{
+                for(l=0;l<bins;l++){
+                    hist_char[k+l]=(unsigned char)255;
+                }
+            }
+            k+=bins;
+        }
+    }
+    fwrite(hist_char, sizeof(unsigned char), (N*bins*max_val), file);
 }

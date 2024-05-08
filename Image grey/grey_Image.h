@@ -54,6 +54,6 @@ grey_Image * image_multiplication(grey_Image *, float);
 Histogram build_histogram(grey_Image *);
 
 //Compute the histogram egalization
-grey_Image * histogram_egalization(grey_Image *);
+void histogram_egalization(grey_Image *);
 
 #endif
