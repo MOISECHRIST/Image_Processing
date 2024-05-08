@@ -23,9 +23,9 @@ void read_image(char *filename,grey_Image *img){
     fscanf(pgmFile, "%d", &tmp);
     img->pixelmax=tmp;
 
-    img->pixels = (unsigned int**)malloc(img->longueur * sizeof(unsigned int*));
+    img->pixels = (unsigned char **)malloc(img->longueur * sizeof(unsigned char *));
     for(i = 0; i < img->longueur; i++)
-        img->pixels[i] = (int*)malloc(img->largeur * sizeof(int));
+        img->pixels[i] = (unsigned char*)malloc(img->largeur * sizeof(unsigned char));
 
     fgetc(pgmFile); // Read white-space
 
@@ -44,26 +44,27 @@ void read_image(char *filename,grey_Image *img){
 }
 
 //save the image in pgm file
-void save_image(grey_Image *img){
-    char *filename="image_output.pgm";
-    FILE *file = fopen(filename, "w");
-    if (file == NULL) {
-        printf("Impossible d'ouvrir le fichier %s\n", filename);
-        return;
+void save_image(grey_Image *img, char *filename){
+    FILE* pgmFile;
+    pgmFile = fopen(filename, "wb");
+    if (pgmFile == NULL) {
+        perror("cannot open file to read");
+        exit(EXIT_FAILURE);
     }
 
-    fprintf(file, "%s\n", img->version);
-    fprintf(file, "%d %d\n", img->largeur, img->longueur);
-    fprintf(file, "%d\n", img->pixelmax);
+    fprintf(pgmFile,"%s\n",img->version);
+    fprintf(pgmFile,"%d %d\n",img->largeur, img->longueur);
+    fprintf(pgmFile,"%d\n",img->pixelmax);
+
+    unsigned char *all_pixels=(unsigned char *)malloc(sizeof(unsigned char *)*(img->largeur * img->longueur));
     int i,j;
-    unsigned int pixel;
     for(i=0;i<img->longueur;i++){
         for(j=0;j<img->largeur;j++){
-            pixel=(unsigned char)img->pixels[i][j];
-            fwrite(&pixel, sizeof(int), 1, file);
+            all_pixels[i*img->largeur+j]=img->pixels[i][j];
         }
     }
-    fclose(file);
+
+    fwrite(all_pixels, sizeof(unsigned char), (img->largeur * img->longueur), pgmFile);
 }
 
 //Display image
@@ -115,11 +116,16 @@ float contract_minmax(grey_Image *img){
 void linear_processing_with_saturation(grey_Image *img, int Smax, int Smin){
     int res[255],i,j;
     for(i=0;i<255;i++){
-        res[i]=255*(i-Smin)/(Smax-Smin);
+        if(i<=Smax && i>=Smin){
+            res[i]=255*(i-Smin)/(Smax-Smin);
+        }
+        else{
+            res[i]=i;
+        }
     }
 
-    img->pixelmin=(int)255*(img->pixelmin-Smin)/(Smax-Smin);
-    img->pixelmax=(int)255*(img->pixelmax-Smin)/(Smax-Smin);
+    img->pixelmin=img->pixelmin<=Smin?img->pixelmin:(int)255*(img->pixelmin-Smin)/(Smax-Smin);
+    img->pixelmax=img->pixelmax>=Smax?img->pixelmax:(int)255*(img->pixelmax-Smin)/(Smax-Smin);
 
     for(i=0;i<img->largeur;i++){
         for(j=0;j<img->longueur;j++)
@@ -148,6 +154,11 @@ grey_Image * image_addition(grey_Image *img1, grey_Image *img2){
     strcpy(img_res->version,img1->version);
     int i,j;
     int mini=255,maxi=0;
+
+    img_res->pixels = (unsigned char **)malloc(img_res->longueur * sizeof(unsigned char *));
+    for(i = 0; i < img_res->longueur; i++)
+        img_res->pixels[i] = (unsigned char*)malloc(img_res->largeur * sizeof(unsigned char));
+        
     for(i=0;i<img_res->longueur;i++){
         for(j=0;j<img_res->largeur;j++){
 
@@ -175,6 +186,11 @@ grey_Image * image_subtraction(grey_Image *img1, grey_Image *img2){
     strcpy(img_res->version,img1->version);
     int i,j;
     int mini=255,maxi=0;
+
+    img_res->pixels = (unsigned char **)malloc(img_res->longueur * sizeof(unsigned char *));
+    for(i = 0; i < img_res->longueur; i++)
+        img_res->pixels[i] = (unsigned char*)malloc(img_res->largeur * sizeof(unsigned char));
+
     for(i=0;i<img_res->longueur;i++){
         for(j=0;j<img_res->largeur;j++){
 
@@ -198,6 +214,11 @@ grey_Image * image_multiplication(grey_Image *img, float ratio){
     strcpy(img_res->version,img->version);
     int i,j;
     int mini=255,maxi=0;
+    
+    img_res->pixels = (unsigned char **)malloc(img_res->longueur * sizeof(unsigned char *));
+    for(i = 0; i < img_res->longueur; i++)
+        img_res->pixels[i] = (unsigned char*)malloc(img_res->largeur * sizeof(unsigned char));
+
     for(i=0;i<img_res->longueur;i++){
         for(j=0;j<img_res->largeur;j++){
 
@@ -208,6 +229,7 @@ grey_Image * image_multiplication(grey_Image *img, float ratio){
                 mini=img_res->pixels[i][j];
         }
     }
+    
     img_res->pixelmax=maxi;
     img_res->pixelmin=mini;
     return img_res;
@@ -228,6 +250,19 @@ Histogram build_histogram(grey_Image *img){
 }
 
 //Compute the histogram egalization
-grey_Image * histogram_egalization(grey_Image *img){
+void histogram_egalization(grey_Image *img){
+    Histogram hist = build_histogram(img);
+    int i,j;
+    float densite[N];
     
+    densite[0]=hist.freq_table[0];
+    for(i=1;i<N;i++){
+        densite[i]=densite[i-1]+hist.freq_table[i];
+    }
+
+    for(i=0;i<img->longueur;i++){
+        for(j=0;j<img->largeur;j++){
+            img->pixels[i][j]=(unsigned char)((int)(255*(densite[img->pixels[i][j]]/hist.total_freq)));
+        }
+    }
 }

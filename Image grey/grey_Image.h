@@ -14,14 +14,14 @@ typedef struct grey_Image {
     char version[3];
     int pixelmax;
     int pixelmin;
-    unsigned int **pixels;
+    unsigned char **pixels;
 } grey_Image;
 
 //Read the image from file path
 void read_image(char *, grey_Image *);
 
 //save the image in pgm file
-void save_image(grey_Image *);
+void save_image(grey_Image *, char *);
 
 //Display image
 void display_image(grey_Image *);
@@ -54,6 +54,6 @@ grey_Image * image_multiplication(grey_Image *, float);
 Histogram build_histogram(grey_Image *);
 
 //Compute the histogram egalization
-grey_Image * histogram_egalization(grey_Image *);
+void histogram_egalization(grey_Image *);
 
 #endif
