@@ -1,4 +1,9 @@
 #include "grey_Image.h"
+#include "histogram.h"
+#include "convolution.h"
+#include "contour_detection.h"
+#include "binary_Image.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,9 +13,9 @@ int main(void){
     grey_Image *img=malloc(sizeof(grey_Image));
     grey_Image *img2=malloc(sizeof(grey_Image));
     grey_Image *img1=malloc(sizeof(grey_Image));
-    char *image_name="3things.256.pgm";
+    char *image_name="data/3things.256.pgm";
     read_image(image_name, img);
-    image_name="3objects.256.pgm";
+    image_name="data/3objects.256.pgm";
     read_image(image_name, img1);
     int bins=30, grey_level=70, ech=1;
     Histogram hist;
@@ -21,14 +26,14 @@ int main(void){
     printf(" - Version : %s\n - Dim : %d %d\n - Pixel max: %d\n - Pixel min : %d\n",img1->version, img1->longueur, img1->largeur, img1->pixelmax, img1->pixelmin);
 
     img2=image_subtraction(img,img1);
-    save_image(img2,"image_sub_things_objects.pgm");
+    save_image(img2,"data/image_sub_things_objects.pgm");
 
     img2=image_subtraction(img1,img);
-    save_image(img2,"image_sub_objects_things.pgm");
+    save_image(img2,"results/image_sub_objects_things.pgm");
 
-    image_name="3things.256.pgm";
+    image_name="data/3things.256.pgm";
     read_image(image_name, img);
     img2=image_addition(img,img2);
-    save_image(img2,"image_add_things_objects.pgm");
+    save_image(img2,"results/image_add_things_objects.pgm");
     return 0;
 }
